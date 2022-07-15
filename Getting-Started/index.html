@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="author" content="ASR-Crash" />
+      <link rel="shortcut icon" href="../favicon.ico" />
+    <title>Getting Started - 厦门大学·RoboMaster·软件标准化</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Getting Started";
+        var mkdocs_page_input_path = "Getting-Started.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <script src="../js/jquery-3.6.0.min.js" defer></script>
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+      <script>hljs.initHighlightingOnLoad();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> 厦门大学·RoboMaster·软件标准化
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption"><span class="caption-text">Overview</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../Introduction/">Introduction</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../Hardware-Support/">Hardware Support</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Basic</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../TIM-Use/">TIM</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../USART-Use/">USART</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../CAN-Use/">CAN</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Controls</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../Software-Install/">Software Install</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="./">Getting Started</a>
+    <ul class="current">
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../Motor-Control/">Motor Control</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">References</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../Motor-Parameters/">Motor Parameters</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">FAQs</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../How-to-Debug/">How to Debug</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">厦门大学·RoboMaster·软件标准化</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" alt="Docs"></a> &raquo;</li>
+          <li>Controls &raquo;</li><li>Getting Started</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h2 id="led">基础入门 点亮第一盏led灯</h2>
+<pre><code>#首先创建一个新的工程文档，然后将会得到一下工程模板
+
+
+#include "stm32f4xx_hal.h"
+#include "can.h"
+#ifdef __cplusplus
+extern "C"
+#endif
+void SysTick_Handler(void)
+{
+    HAL_IncTick();
+    HAL_SYSTICK_IRQHandler();
+}                                    //以上为头文件加载与系统计时器、中断服务函数初始化
+
+int main(void)                 //主函数，点亮LED灯的重点
+{
+    HAL_Init();               //HAL库函数的初始化
+__GPIOD_CLK_ENABLE();     //初始化GPIO对应组的时钟，需要查看原理图找到想要使能的GPIO口的组别（组别从A-G）
+GPIO_InitTypeDef GPIO_InitStructure; //定义一个GPIO初始化结构体，用于配置相关寄存器
+
+GPIO_InitStructure.Pin = GPIO_PIN_12;    //pin脚的设置，需要查看原理图得到对应pin脚编号
+
+GPIO_InitStructure.Mode = GPIO_MODE_OUTPUT_PP;  //设置GPIO的模式
+GPIO_InitStructure.Speed = GPIO_SPEED_HIGH;    //设置GPIO的速度
+GPIO_InitStructure.Pull = GPIO_NOPULL;           //设置GPIO的上下拉状态
+HAL_GPIO_Init(GPIOD, &amp;GPIO_InitStructure);     //GPIO的初始化，一样需要改要使能的GPIO的组别
+
+for (;;)
+{
+    HAL_GPIO_WritePin(GPIOD, GPIO_PIN_12, GPIO_PIN_SET);
+     //调用库函数更改使能的GPIO口的状态，入口参数的组别与引脚编号均需要改变
+    HAL_Delay(500);                   //调用HAL delay库函数，延迟一定时间，单位ms
+    HAL_GPIO_WritePin(GPIOD, GPIO_PIN_12, GPIO_PIN_RESET); //同上
+    HAL_Delay(500);
+}
+
+}
+</code></pre>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../Software-Install/" class="btn btn-neutral float-left" title="Software Install"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../Motor-Control/" class="btn btn-neutral float-right" title="Motor Control">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+      <p>Copyright © 2022 ASR-Crash, XMU-RCS</p>
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../Software-Install/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../Motor-Control/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme_extra.js" defer></script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>
