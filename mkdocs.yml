@@ -18,6 +18,6 @@ nav:
 - FAQs:
     - How to Debug: How-to-Debug.md
 
-theme: mkdocs
+theme: readthedocs
 site_author: ASR-Crash
 copyright: Copyright © 2022 ASR-Crash, XMU-RCS
