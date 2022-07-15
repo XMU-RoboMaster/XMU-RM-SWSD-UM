@@ -1,0 +1,23 @@
+site_name: 厦门大学·RoboMaster·软件标准化
+site_favicon: favicon.ico
+site_url: 
+nav:
+- Overview:
+    - Introduction: Introduction.md
+    - Hardware Support: Hardware-Support.md
+- Basic:
+    - TIM: TIM-Use.md
+    - USART: USART-Use.md
+    - CAN: CAN-Use.md
+- Controls:
+    - Software Install: Software-Install.md
+    - Getting Started: Getting-Started.md
+    - Motor Control: Motor-Control.md
+- References:
+    - Motor Parameters: Motor-Parameters.md
+- FAQs:
+    - How to Debug: How-to-Debug.md
+
+theme: mkdocs
+site_author: ASR-Crash
+copyright: Copyright © 2022 ASR-Crash, XMU-RCS
